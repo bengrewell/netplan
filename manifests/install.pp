@@ -13,10 +13,16 @@ class netplan::install {
 
   # Disable cloud-init network configuration if disable flag is set
   if $::netplan::disable_cloud_init {
+    file { 'netplan ensure /etc/cloud exists':
+      ensure => directory,
+      path   => '/etc/cloud'
+    }
+    
     file { 'netplan ensure /etc/cloud/cloud.cfg.d exists':
       ensure => directory,
       path   => '/etc/cloud/cloud.cfg.d/',
     }
+    
     file { 'netplan ensure 99-disable-network-config.cfg exists':
       ensure  => file,
       path    => '/etc/cloud/cloud.cfg.d/99-disable-network-config.cfg',
